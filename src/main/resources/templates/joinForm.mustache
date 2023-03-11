@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>회원가입 페이지</h1>
+    <hr/>
+    <form>
+        <input type="text" id="username" /> <br/>
+        <input type="password" id="password" /><br/>
+        <input type="tel" id="tel" /> <br/>
+        <button type="button" onclick="join()">회원가입</button>
+    </form>
+
+    <script>
+        async function join(){
+            // this란 : https://www.youtube.com/watch?v=tDZROpAdJ9w
+            this.event.preventDefault();
+
+            let requestBody = {
+                username: document.querySelector("#username").value,
+                password: document.querySelector("#password").value,
+                tel: document.querySelector("#tel").value,
+            };
+
+            try {
+                let response = await fetch("/join/v1",{
+                    method: "post",
+                    body: JSON.stringify(requestBody),
+                    headers: {
+                        "Content-Type":"application/json; charset=utf-8"
+                    }
+                });
+                let responseBody = await response.json();
+
+                if(!response.ok){
+                    throw new Error(responseBody.msg);
+                }
+
+                console.log(responseBody.data);
+                alert(responseBody.msg);
+                location.href = "/";
+
+            }catch (err){
+                alert(err);
+                //console.error(err);
+            }
+
+        }
+    </script>
+</body>
+</html>
