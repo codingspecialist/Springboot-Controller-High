@@ -1,5 +1,6 @@
 package shop.mtcoding.filterandhandler.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ public class UserController {
 
     @PostMapping("/login/v1")
     public String loginV1(){
+        // DB에서 username과 password를 체크하고 잘되면!! redirect 하겠다.
         return "redirect:/";
     }
 
@@ -36,6 +38,7 @@ public class UserController {
         return Script.href("/", "로그인성공");
     }
 
+    // 유효성 : POST, PUT
     @PostMapping("/login/v3")
     public @ResponseBody String loginV3(String username, String password){
         if(username == null || username.isEmpty()){
@@ -53,11 +56,11 @@ public class UserController {
     }
 
     @PostMapping("/join/v1")
-    public ResponseEntity<?> joinV1(@RequestBody JoinReqDto joinReqDto){
+    public ResponseEntity<?> joinV1(JoinReqDto joinReqDto){
 
         if(joinReqDto.getUsername() == null || joinReqDto.getUsername().isEmpty()){
             ResponseDto<?> responseDto = new ResponseDto<>("username이 없습니다.");
-            return ResponseEntity.badRequest().body(responseDto);
+            return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
         }
         if(joinReqDto.getPassword() == null || joinReqDto.getPassword().isEmpty()){
             ResponseDto<?> responseDto = new ResponseDto<>("password가 없습니다.");
@@ -82,6 +85,7 @@ public class UserController {
         }
         if(joinReqDto.getPassword() == null || joinReqDto.getPassword().isEmpty()){
             throw new RestControllerException("password를 입력해주세요");
+
         }
         if(joinReqDto.getTel() == null || joinReqDto.getTel().isEmpty()){
             throw new RestControllerException("tel을 입력해주세요");

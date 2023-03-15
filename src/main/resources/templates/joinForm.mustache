@@ -8,50 +8,54 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>회원가입 페이지</h1>
-    <hr/>
-    <form>
-        <input type="text" id="username" /> <br/>
-        <input type="password" id="password" /><br/>
-        <input type="tel" id="tel" /> <br/>
-        <button type="button" onclick="join()">회원가입</button>
-    </form>
+<h1>회원가입 페이지</h1>
+<hr/>
+<form>
+    <input type="text" id="username"/> <br/>
+    <input type="password" id="password"/><br/>
+    <input type="tel" id="tel"/> <br/>
+    <button type="button" onclick="join()">회원가입</button>
+</form>
 
-    <script>
-        async function join(){
-            // this란 : https://www.youtube.com/watch?v=tDZROpAdJ9w
-            this.event.preventDefault();
+<script>
+    async function join() {
+        // this란 : https://www.youtube.com/watch?v=tDZROpAdJ9w
+        // this.event.preventDefault(); // form 태그 액션을 실행하지마!!
 
-            let requestBody = {
-                username: document.querySelector("#username").value,
-                password: document.querySelector("#password").value,
-                tel: document.querySelector("#tel").value,
-            };
+        let requestBody = {
+            username: document.querySelector("#username").value,
+            password: document.querySelector("#password").value,
+            tel: document.querySelector("#tel").value,
+        };
 
-            try {
-                let response = await fetch("/join/v1",{
-                    method: "post",
-                    body: JSON.stringify(requestBody),
-                    headers: {
-                        "Content-Type":"application/json; charset=utf-8"
-                    }
-                });
-                let responseBody = await response.json();
+        //console.log(requestBody);
+        //console.log(JSON.stringify(requestBody));
 
-                if(!response.ok){
-                    throw new Error(responseBody.msg);
+        try {
+            let response = await fetch("/join/v2", {
+                method: "post",
+                body: JSON.stringify(requestBody),
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8"
                 }
+            });
 
-                console.log(responseBody.data);
-                alert(responseBody.msg);
-                location.href = "/";
+            let responseBody = await response.json();
 
-            }catch (err){
-                alert(err);
-                //console.error(err);
+            if (!response.ok) {
+                throw new Error(responseBody.msg);
             }
 
+            console.log(responseBody.data);
+            alert(responseBody.msg);
+            location.href = "/home";
+
+        } catch (err) {
+            alert(err);
+            //console.error(err);
         }
-    </script>
+
+    }
+</script>
 </body>
 </html>
